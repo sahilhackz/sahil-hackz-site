@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin Panel - Sahil Hackz</title>
+<style>
+  body { background: #000; color: #0f0; font-family: monospace; margin: 0; padding: 20px; }
+  h1 { text-align: center; }
+  #login-form, #admin-panel { max-width: 400px; margin: auto; }
+  input[type=email], input[type=password] {
+    width: 100%; padding: 10px; margin: 10px 0; background: #111; border: 1px solid #0f0; color: #0f0; border-radius: 4px;
+  }
+  button {
+    background: #0f0; border: none; padding: 10px 15px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 4px;
+  }
+  #admin-panel { display:none; }
+  label { display:block; margin-top: 10px; }
+  textarea { width: 100%; height: 60px; background:#111; color:#0f0; border:1px solid #0f0; border-radius:4px; padding: 8px; resize:none; }
+  .logout-btn { background:#f00; margin-top: 10px; }
+</style>
+</head>
+<body>
+<h1>Admin Login</h1>
+<div id="login-form">
+  <input type="email" id="email" placeholder="Email" value="mdshahil74828@gmail.com" readonly />
+  <input type="password" id="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+  <p id="msg" style="color:#f00;"></p>
+</div>
+<div id="admin-panel">
+  <h2>Welcome Admin</h2>
+  <p>Edit your content here. (Demo only)</p>
+  <label>Tools (JSON format)</label>
+  <textarea id="tools-json">[{"name":"APK Tool 1","icon":"https://cdn-icons-png.flaticon.com/512/888/888857.png","link":"https://www.mediafire.com/file/sample1.apk"},{"name":"APK Tool 2","icon":"https://cdn-icons-png.flaticon.com/512/888/888857.png","link":"https://www.mediafire.com/file/sample2.apk"}]</textarea>
+  <label>Videos (JSON format)</label>
+  <textarea id="videos-json">[{"title":"Hack Tutorial 1","thumb":"https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg","videoId":"dQw4w9WgXcQ","channelLink":"https://www.youtube.com/@sahilhackz"},{"title":"Hack Tutorial 2","thumb":"https://img.youtube.com/vi/3JZ_D3ELwOQ/0.jpg","videoId":"3JZ_D3ELwOQ","channelLink":"https://www.youtube.com/@sahilhackz"}]</textarea>
+  <label>Contacts (JSON format)</label>
+  <textarea id="contacts-json">[{"name":"WhatsApp","icon":"https://cdn-icons-png.flaticon.com/512/733/733585.png","link":"https://wa.me/7870381250"},{"name":"Telegram","icon":"https://cdn-icons-png.flaticon.com/512/2111/2111646.png","link":"https://t.me/sahil_hackz"},{"name":"Instagram","icon":"https://cdn-icons-png.flaticon.com/512/1384/1384063.png","link":"https://instagram.com/sahil_hackz"},{"name":"YouTube","icon":"https://cdn-icons-png.flaticon.com/512/1384/1384060.png","link":"https://www.youtube.com/@sahilhackz"},{"name":"Email","icon":"https://cdn-icons-png.flaticon.com/512/732/732200.png","link":"mailto:mdshahil74828@gmail.com"}]</textarea>
+  <button onclick="saveData()">Save Changes</button>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+  <p id="status" style="color:#0f0;"></p>
+</div>
+
+<script>
+  // Demo password (for demonstration only)
+  const ADMIN_EMAIL = "mdshahil74828@gmail.com";
+  const ADMIN_PASSWORD = "sahil123"; // Change after deploy for security
+
+  const loginForm = document.getElementById('login-form');
+  const adminPanel = document.getElementById('admin-panel');
+  const msg = document.getElementById('msg');
+  const status = document.getElementById('status');
+
+  function login() {
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    if(email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+      loginForm.style.display = 'none';
+      adminPanel.style.display = 'block';
+      msg.innerText = "";
+      loadData();
+    } else {
+      msg.innerText = "Invalid credentials";
+    }
+  }
+
+  function logout() {
+    loginForm.style.display = 'block';
+    adminPanel.style.display = 'none';
+    status.innerText = "";
+    document.getElementById('password').value = "";
+  }
+
+  // Load data from localStorage (simulate DB)
+  function loadData() {
+    document.getElementById('tools-json').value = localStorage.getItem('tools') || document.getElementById('tools-json').value;
+    document.getElementById('videos-json').value = localStorage.getItem('videos') || document.getElementById('videos-json').value;
+    document.getElementById('contacts-json').value = localStorage.getItem('contacts') || document.getElementById('contacts-json').value;
+  }
+
+  // Save data to localStorage (simulate DB)
+  function saveData() {
+    localStorage.setItem('tools', document.getElementById('tools-json').value);
+    localStorage.setItem('videos', document.getElementById('videos-json').value);
+    localStorage.setItem('contacts', document.getElementById('contacts-json').value);
+    status.innerText = "Data saved locally! (Reload website to see changes)";
+  }
+</script>
+</body>
+</html>

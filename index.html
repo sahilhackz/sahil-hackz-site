@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sahil Hackz - Hacker Style Website</title>
+<style>
+  body { background: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; margin:0; padding:0;}
+  header { background:#111; padding: 20px; text-align:center; font-size: 2em; font-weight:bold; letter-spacing: 2px; }
+  nav { display:flex; justify-content:center; gap: 15px; padding: 10px; background:#111; }
+  nav button { background: #0f0; border:none; color:#000; padding: 10px 15px; cursor:pointer; font-weight:bold; border-radius: 4px; }
+  section { padding: 20px; }
+  .tools, .videos, .contacts { margin-top:20px; }
+  .tool-item, .video-item, .contact-item {
+    background:#111; padding: 10px; margin-bottom: 10px; border-radius: 5px;
+    display:flex; align-items:center; gap: 10px;
+  }
+  .tool-item img, .video-item img, .contact-item img {
+    width:40px; height:40px; border-radius: 4px;
+  }
+  .download-btn, .open-btn {
+    margin-left:auto; background:#0f0; color:#000; border:none; padding:5px 10px; font-weight:bold; cursor:pointer; border-radius: 4px;
+  }
+  .video-player {
+    display:none; margin-top: 15px; max-width: 100%; border: 2px solid #0f0;
+  }
+</style>
+</head>
+<body>
+<header>SAHIL HACKZ</header>
+<nav>
+  <button onclick="showSection('tools')">Tools</button>
+  <button onclick="showSection('videos')">Videos</button>
+  <button onclick="showSection('contacts')">Contacts</button>
+</nav>
+<section>
+  <div id="tools" class="tools">
+    <h2>APK Tools</h2>
+    <div id="tools-list"></div>
+  </div>
+  <div id="videos" class="videos" style="display:none;">
+    <h2>Videos</h2>
+    <div id="videos-list"></div>
+    <iframe id="video-player" class="video-player" width="320" height="180" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <div id="contacts" class="contacts" style="display:none;">
+    <h2>Contacts</h2>
+    <div id="contacts-list"></div>
+  </div>
+</section>
+
+<script>
+  // Demo data - replace with Firebase DB later or fetch dynamically
+  const tools = [
+    {name:"APK Tool 1", icon:"https://cdn-icons-png.flaticon.com/512/888/888857.png", link:"https://www.mediafire.com/file/sample1.apk"},
+    {name:"APK Tool 2", icon:"https://cdn-icons-png.flaticon.com/512/888/888857.png", link:"https://www.mediafire.com/file/sample2.apk"}
+  ];
+
+  const videos = [
+    {title:"Hack Tutorial 1", thumb:"https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg", videoId:"dQw4w9WgXcQ", channelLink:"https://www.youtube.com/@sahilhackz"},
+    {title:"Hack Tutorial 2", thumb:"https://img.youtube.com/vi/3JZ_D3ELwOQ/0.jpg", videoId:"3JZ_D3ELwOQ", channelLink:"https://www.youtube.com/@sahilhackz"}
+  ];
+
+  const contacts = [
+    {name:"WhatsApp", icon:"https://cdn-icons-png.flaticon.com/512/733/733585.png", link:"https://wa.me/7870381250"},
+    {name:"Telegram", icon:"https://cdn-icons-png.flaticon.com/512/2111/2111646.png", link:"https://t.me/sahil_hackz"},
+    {name:"Instagram", icon:"https://cdn-icons-png.flaticon.com/512/1384/1384063.png", link:"https://instagram.com/sahil_hackz"},
+    {name:"YouTube", icon:"https://cdn-icons-png.flaticon.com/512/1384/1384060.png", link:"https://www.youtube.com/@sahilhackz"},
+    {name:"Email", icon:"https://cdn-icons-png.flaticon.com/512/732/732200.png", link:"mailto:mdshahil74828@gmail.com"}
+  ];
+
+  // Render tools
+  const toolsList = document.getElementById('tools-list');
+  tools.forEach(tool=>{
+    const div = document.createElement('div');
+    div.className = 'tool-item';
+    div.innerHTML = `
+      <img src="${tool.icon}" alt="${tool.name}" />
+      <div>${tool.name}</div>
+      <button class="download-btn" onclick="window.open('${tool.link}', '_blank')">Download</button>
+    `;
+    toolsList.appendChild(div);
+  });
+
+  // Render videos
+  const videosList = document.getElementById('videos-list');
+  const videoPlayer = document.getElementById('video-player');
+  videos.forEach(video=>{
+    const div = document.createElement('div');
+    div.className = 'video-item';
+    div.innerHTML = `
+      <img src="${video.thumb}" alt="${video.title}" />
+      <div>${video.title}</div>
+      <button class="open-btn" onclick="playVideo('${video.videoId}', '${video.channelLink}')">Play</button>
+    `;
+    videosList.appendChild(div);
+  });
+
+  // Render contacts
+  const contactsList = document.getElementById('contacts-list');
+  contacts.forEach(contact=>{
+    const div = document.createElement('div');
+    div.className = 'contact-item';
+    div.innerHTML = `
+      <img src="${contact.icon}" alt="${contact.name}" />
+      <div>${contact.name}</div>
+      <button class="open-btn" onclick="window.open('${contact.link}', '_blank')">Open</button>
+    `;
+    contactsList.appendChild(div);
+  });
+
+  // Show section function
+  function showSection(section) {
+    ['tools','videos','contacts'].forEach(s=>{
+      document.getElementById(s).style.display = (s===section) ? 'block' : 'none';
+    });
+    videoPlayer.style.display = 'none'; // hide player on section switch
+  }
+
+  // Play video mini player
+  function playVideo(videoId, channelLink) {
+    videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0`;
+    videoPlayer.style.display = 'block';
+    videoPlayer.focus();
+    // If user clicks on YouTube logo, open channel link in new tab (we will assume player controls have that)
+    // Alternatively, can add a clickable YouTube icon here (not implemented yet)
+  }
+
+  // Initially show tools
+  showSection('tools');
+</script>
+</body>
+</html>
